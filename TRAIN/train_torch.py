@@ -186,6 +186,7 @@ for epoch in range(num_epochs):
             
         # 自动保存 checkpoint
         if total_step>0 and total_step % save_every == 0:
+            avg_loss = global_loss / total_step
             save_checkpoint(policy_model, total_step, avg_loss)
             print(f"Checkpoint saved at step {total_step}")
     print(f"Epoch {epoch+1} finished | "f"Epoch Avg Loss {epoch_loss/len(train_loader):.4f}",flush=True)
