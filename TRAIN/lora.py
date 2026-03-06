@@ -44,8 +44,8 @@ class LoraLinear(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         scaling = float(self.alpha) / float(self.r)     # lora 缩放系数
-        lora_adjustment = F.linear(self.dropout(x), self.lora_A)
-        lora_adjustment = F.linear(lora_adjustment, self.lora_B)
+        lora_adjustment = F.linear(self.dropout(x), self.lora_A.to(x.dtype))
+        lora_adjustment = F.linear(lora_adjustment, self.lora_B.to(x.dtype))
         return self.base_layer(x) + lora_adjustment * scaling
 
 
