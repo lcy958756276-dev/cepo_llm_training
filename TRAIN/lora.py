@@ -26,8 +26,10 @@ class LoraLinear(nn.Module):
 
         # 定义 lora_A 和 lora_B 为 Parameter
         dev = base_layer.weight.device
-        self.lora_A = nn.Parameter(torch.empty((r, base_layer.in_features), dtype=base_layer.weight.dtype,device=dev))
-        self.lora_B = nn.Parameter(torch.empty((base_layer.out_features, r), dtype=base_layer.weight.dtype,device=dev))
+        # self.lora_A = nn.Parameter(torch.empty((r, base_layer.in_features), dtype=base_layer.weight.dtype,device=dev))
+        # self.lora_B = nn.Parameter(torch.empty((base_layer.out_features, r), dtype=base_layer.weight.dtype,device=dev))
+        self.lora_A = nn.Parameter(torch.empty((r, base_layer.in_features), dtype=torch.float32,device=dev))
+        self.lora_B = nn.Parameter(torch.empty((base_layer.out_features, r), dtype=torch.float32,device=dev))
 
         # 初始化 lora 矩阵
         nn.init.normal_(self.lora_A, mean=0.0, std=0.02)
