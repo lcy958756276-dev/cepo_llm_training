@@ -145,11 +145,10 @@ for epoch in range(num_epochs):
     pbar = tqdm(train_loader, desc=f"Epoch {epoch+1}/{num_epochs}")
 
     for step, batch in enumerate(pbar):
-
         sample = {
             "prompt": batch["prompt"][0],
-            "chosen_list": batch["chosen_list"][0],
-            "reject": batch["reject"][0]
+            "chosen_list": [x[0] for x in batch["chosen_list"]],
+            "reject": [[y[0] for y in block] for block in batch["reject"]]
         }
         loss,loss_rank1,loss_eq1 = cepo_loss_separate(
             model=policy_model,
