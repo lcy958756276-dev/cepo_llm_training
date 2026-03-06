@@ -88,7 +88,7 @@ def replace_linear_with_lora(
     for name, child in module.named_children():
         # 如果遇到 Linear 并且名字匹配
         if isinstance(child, nn.Linear) and name in target_modules:
-            lora_layer = LoRALinear(child, r=r, alpha=alpha, dropout_p=dropout_p)
+            lora_layer = LoraLinear(child, r=r, alpha=alpha, dropout_p=dropout_p)
             setattr(module, name, lora_layer)
 
         else:
