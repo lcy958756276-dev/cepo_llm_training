@@ -8,6 +8,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from transformers import get_cosine_schedule_with_warmup
 import torch.nn.functional as F
+
 class LoraLinear(nn.Module):
     def __init__(
         self,
@@ -24,8 +25,9 @@ class LoraLinear(nn.Module):
         self.dropout = nn.Dropout(dropout_p)
 
         # 定义 lora_A 和 lora_B 为 Parameter
-        self.lora_A = nn.Parameter(torch.empty((r, base_layer.in_features), dtype=base_layer.weight.dtype))
-        self.lora_B = nn.Parameter(torch.empty((base_layer.out_features, r), dtype=base_layer.weight.dtype))
+        dev = base_layer.weight.device
+        self.lora_A = nn.Parameter(torch.empty((r, base_layer.in_features), dtype=base_layer.weight.dtype,device=dev))
+        self.lora_B = nn.Parameter(torch.empty((base_layer.out_features, r), dtype=base_layer.weight.dtype,device=dev))
 
         # 初始化 lora 矩阵
         nn.init.normal_(self.lora_A, mean=0.0, std=0.02)

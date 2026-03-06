@@ -1,7 +1,7 @@
 #修改了compute_seq_logprob，利用crossentropy
 import torch
 import torch.nn.functional as F
-
+device = "cuda" if torch.cuda.is_available() else "cpu"
 def compute_seq_logprob(model, enc, prompt_len):
     """
     计算每个序列生成部分的平均 log-prob

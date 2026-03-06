@@ -26,7 +26,7 @@ from utils.utils_cepo4 import compute_seq_logprob,cepo_loss_separate
 from transformers import BitsAndBytesConfig
 
 top_k = 5
-
+device = "cuda" if torch.cuda.is_available() else "cpu" 
 best_checkpoints = []  # 小顶堆 [(loss, path), ...]
 
 def save_checkpoint(model, step, loss):
@@ -54,7 +54,7 @@ df = pd.read_json(data_path,lines=True)
 ds = Dataset.from_pandas(df)
 train_data = ds
 train_loader = DataLoader(train_data, batch_size=1, shuffle=True)
-save_every=200
+save_every=1#验证，先改一下！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 total_step = 0
 global_loss = 0.0
 num_epochs = 3
@@ -82,6 +82,7 @@ replace_linear_with_lora(
     dropout_p=0.05,
     target_modules=("q_proj", "k_proj", "v_proj", "o_proj")
 )
+
 
 # 冻结所有非 LoRA 参数
 for name, p in policy_model.named_parameters():
