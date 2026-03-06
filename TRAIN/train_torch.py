@@ -67,9 +67,15 @@ total_norm=0.0
 tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
 
 # ===== policy model（训练用）=====
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.bfloat16,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_use_double_quant=True
+)
 policy_model = AutoModelForCausalLM.from_pretrained(
     model_path,
-    dtype=torch.bfloat16,
+    quantization_config=bnb_config,
     device_map="auto",
     trust_remote_code=True
 )
@@ -103,7 +109,7 @@ bnb_config = BitsAndBytesConfig(
 ref_model = AutoModelForCausalLM.from_pretrained(
     model_path,
     quantization_config=bnb_config,
-    device_map="cpu",
+    device_map="auto",
     trust_remote_code=True
 )
 
