@@ -23,7 +23,7 @@ import pandas as pd
 from datasets import Dataset
 from lora import replace_linear_with_lora, print_trainable_parameters,save_lora,load_lora
 from utils.utils_cepo4 import compute_seq_logprob,cepo_loss_separate
-
+from transformers import BitsAndBytesConfig
 
 top_k = 5
 
@@ -69,7 +69,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
 # ===== policy model（训练用）=====
 policy_model = AutoModelForCausalLM.from_pretrained(
     model_path,
-    torch_dtype=torch.bfloat16,
+    dtype=torch.bfloat16,
     device_map="auto",
     trust_remote_code=True
 )
@@ -95,7 +95,7 @@ print_trainable_parameters(policy_model)
 # ===== reference model（完全冻结）=====
 ref_model = AutoModelForCausalLM.from_pretrained(
     model_path,
-    load_in_4bit=True,
+    quantization_config=bnb_config,
     device_map="auto",
     trust_remote_code=True
 )
