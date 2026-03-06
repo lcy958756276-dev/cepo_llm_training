@@ -97,6 +97,9 @@ for name, p in policy_model.named_parameters():
 
 print("Policy model:")
 print_trainable_parameters(policy_model)
+policy_model.gradient_checkpointing_enable()
+policy_model.enable_input_require_grads()
+policy_model.config.use_cache = False
 
 
 # ===== reference model（完全冻结）=====
